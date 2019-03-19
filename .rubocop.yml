@@ -1,0 +1,6 @@
+##
+# .rubocop.yml
+
+AllCops:
+  Exclude:
+    - 'bin/*'
