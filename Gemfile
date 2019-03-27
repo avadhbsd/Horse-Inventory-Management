@@ -39,6 +39,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'crypt_keeper'
+gem 'devise'
 gem 'shopify_api'
 
 group :development, :test do

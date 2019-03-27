@@ -6,6 +6,8 @@ AllCops:
     - 'bin/*'
     - 'db/migrate/*'
     - 'db/schema.rb'
+    - 'config/initializers/devise.rb'
+
 
 Metrics/BlockLength:
   Exclude:
