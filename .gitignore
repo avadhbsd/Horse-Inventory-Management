@@ -28,3 +28,6 @@
 .idea
 coverage
 .env
+
+# Redis
+dump.rdb
