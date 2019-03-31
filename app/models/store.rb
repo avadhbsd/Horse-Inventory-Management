@@ -23,4 +23,23 @@ class Store < ApplicationRecord
                             url
     yield
   end
+
+  def sync!
+    s_products = connect_to_shopify do
+      with_retry do
+        ShopifyAPI::Product.find(:all)
+      end
+    end
+    products_count = s_products.count
+    puts "Syncing #{products_count} products..."
+    s_products.each do |s_p|
+      product = products.find_by_id(s_p.attributes[:id])
+      product ||= products.new
+      product.sync!(s_p, skip_validations: true)
+    end
+  end
+
+  def self.sync_all!
+    Store.all.map(&:sync!)
+  end
 end

@@ -8,5 +8,8 @@ class SharedProductVariant < ApplicationRecord
   has_many :line_items
   has_many :inventory_levels
   has_many :locations, through: :inventory_levels
-  belongs_to :shared_product
+  belongs_to :shared_product, optional: true
+
+  scope :with_no_s_p, -> { where(shared_product_id: nil) }
+
 end
