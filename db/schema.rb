@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_103737) do
+ActiveRecord::Schema.define(version: 2019_03_27_113822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_103737) do
     t.bigint "shared_product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "inventory_quantity", default: 0, null: false
     t.index ["product_id"], name: "index_product_variants_on_product_id"
     t.index ["shared_product_id"], name: "index_product_variants_on_shared_product_id"
     t.index ["shared_product_variant_id"], name: "index_product_variants_on_shared_product_variant_id"
@@ -152,6 +153,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_103737) do
     t.bigint "shared_product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "inventory_quantity", default: 0, null: false
     t.index ["shared_product_id"], name: "index_shared_product_variants_on_shared_product_id"
   end
 
