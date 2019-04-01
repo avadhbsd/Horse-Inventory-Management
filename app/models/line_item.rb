@@ -14,6 +14,8 @@ class LineItem < ApplicationRecord
   # Assign the shared_product and shared_product_variant ids for the line_item.
   def assign_shared_attributes
     product_variant = self.product_variant
+    return unless product_variant
+
     self.shared_product_variant_id = product_variant.shared_product_variant_id
     self.shared_product_id = product_variant.shared_product_id
   end

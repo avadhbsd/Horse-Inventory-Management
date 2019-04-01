@@ -16,8 +16,8 @@ module WebhookReceivers
 
       def receive!
         # create the order without the line_items
-        order = store.orders.create(params.except(:line_items))
-        params[:line_items].each do |line_item_params|
+        order = store.orders.create(@params.except(:line_items))
+        @params[:line_items].each do |line_item_params|
           # rename line_item parameters.
           line_item_params[:product_variant_id] =
             line_item_params.delete(:variant_id)
