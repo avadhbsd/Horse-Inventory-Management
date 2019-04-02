@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# General Admin Controller
+# Admin Base Controller
 class AdminController < ApplicationController
-  def index; end
+  before_action :authenticate_admin!
 end

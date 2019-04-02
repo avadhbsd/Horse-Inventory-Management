@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Horse</title>
+    <title>Horse <%= page_title %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <% unless current_admin %>
+      <%= stylesheet_link_tag    'keen/login', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <% end %>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Latest updates and statistic charts">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,53 +28,27 @@
             }
         });
     </script>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
   </head>
-
-  <body class="kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-page--loading">
-    <%= render 'layouts/header_mobile' %>
-    <!-- begin:: Root -->
-    <div class="kt-grid kt-grid--hor kt-grid--root">
-      <!-- begin:: Page -->
-      <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
-        <%= render 'layouts/aside' %>
-        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
-          <%= render 'layouts/header' %>
-          <%= yield %>
-          <%= render 'layouts/footer' %>
+  <% if current_admin %>
+    <body class="kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-page--loading">
+      <%= render 'layouts/header_mobile' %>
+      <!-- begin:: Root -->
+      <div class="kt-grid kt-grid--hor kt-grid--root">
+        <!-- begin:: Page -->
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+          <%= render 'layouts/aside' %>
+          <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+            <%= render 'layouts/header' %>
+            <%= render 'layouts/flash_messages' %>
+            <%= yield %>
+            <%= render 'layouts/footer' %>
+          </div>
         </div>
       </div>
-    </div>
-    <script>
-      var KTAppOptions = {
-        "colors": {
-          "state": {
-            "brand": "#5d78ff",
-            "metal": "#c4c5d6",
-            "light": "#ffffff",
-            "accent": "#00c5dc",
-            "primary": "#5867dd",
-            "success": "#34bfa3",
-            "info": "#36a3f7",
-            "warning": "#ffb822",
-            "danger": "#fd3995",
-            "focus": "#9816f4"
-          },
-          "base": {
-            "label": [
-                "#c5cbe3",
-                "#a1a8c3",
-                "#3d4465",
-                "#3e4466"
-            ],
-            "shape": [
-                "#f0f3ff",
-                "#d9dffa",
-                "#afb4d4",
-                "#646c9a"]
-          }
-      }
-    };
-    </script>
-  </body>
+    </body>
+  <% else %>
+    <%= yield %>
+  <% end %>
 </html>

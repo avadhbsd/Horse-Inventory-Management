@@ -1,0 +1,14 @@
+<% {
+  notice: :success,
+  alert: :danger,
+  error: :danger,
+  success: :success,
+  warning: :warning,
+  info: :info
+}.each do |flash_type, div_class|%>
+  <% if flash[flash_type] %>
+    <div class="alert alert-<%= div_class%> fade show" role="alert">
+      <div class="alert-text"><%= flash[flash_type] %></div>
+    </div>
+  <% end %>
+<% end %>
