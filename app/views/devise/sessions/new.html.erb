@@ -1,0 +1,56 @@
+<body class="kt-login-v2--enabled kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--fixed kt-page--loading" >
+  <div class="kt-grid kt-grid--ver kt-grid--root">
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid kt-grid--hor kt-login-v2" id="kt_login_v2">
+      <div class="kt-grid__item kt-grid--hor">
+        <div class="kt-login-v2__head">
+          <div class="kt-login-v2__logo">
+            <a href="#">
+              <%= image_tag 'brand/logo.png', size: '191x87' %>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="kt-grid__item kt-grid kt-grid--ver kt-grid__item--fluid">
+        <div class="kt-login-v2__body">
+          <div class="kt-login-v2__wrapper">
+            <div class="kt-login-v2__container">
+              <div class="kt-login-v2__title">
+                <h3>
+                  Log in to your account
+                </h3>
+              </div>
+              <%= form_tag admin_session_path, method: :post, class: 'kt-login-v2__form kt-form' do%>
+                <%= render partial: 'layouts/flash_messages' %>
+                <div class="form-group">
+                  <%= email_field_tag 'admin[email]', nil, class: "form-control", required: true, placeholder: "Email" %>
+                </div>
+                <div class="form-group">
+                  <%= password_field_tag 'admin[password]', nil, class: "form-control", required: true, placeholder: "Password" %>
+                </div>
+                <div class="form-group">
+                  <label for='admin_remember_me' class="kt-checkbox kt-checkbox--bold kt-checkbox--brand">
+                    <%= check_box_tag 'admin[remember_me]', '1', false, class: ""%>
+                    Keep me logged in
+                    <span></span>
+                  </label>
+                </div>
+                <div class="kt-login-v2__actions">
+                  <a href="#" class="kt-link kt-link--brand"></a> 
+                  <button type="submit" class="btn btn-brand btn-elevate btn-pill">Sign In</button>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="kt-login-v2__image">
+            <%= image_tag 'brand/login_bg.png', size: '500x437' %>
+          </div>
+        </div>
+      </div>
+      <div class="kt-grid__item">
+        <div class="kt-login-v2__footer">
+          <div class="kt-login-v2__info">&copy; 2019 Horse</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

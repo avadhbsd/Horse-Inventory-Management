@@ -62,6 +62,4 @@ class Store < ApplicationRecord
 			order.sync!(shopify_order, skip_validations:true)
 		end
 	end
-
-
 end

@@ -8,6 +8,9 @@ AllCops:
     - 'db/schema.rb'
     - 'config/initializers/devise.rb'
 
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'app/controllers/admin/*'
 
 Metrics/BlockLength:
   Exclude:

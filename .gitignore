@@ -31,3 +31,6 @@ coverage
 
 # Redis
 dump.rdb
+
+# macOS finder configuration
+.DS_STORE
