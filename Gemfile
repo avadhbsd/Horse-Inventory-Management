@@ -39,8 +39,11 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'crypt_keeper'
+gem 'devise'
+gem 'redis-rails'
+gem 'require_all'
 gem 'shopify_api'
-
+gem 'sidekiq'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop
   # execution and get a debugger console
@@ -70,6 +73,7 @@ group :test do
   gem 'chromedriver-helper'
 
   gem 'rails-controller-testing'
+  gem 'rspec-sidekiq'
   gem 'shoulda-matchers', '4.0.0.rc1'
   gem 'simplecov', require: false
 end

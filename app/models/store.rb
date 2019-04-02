@@ -2,7 +2,8 @@
 
 # Represents a Shopify Store.
 class Store < ApplicationRecord
-  crypt_keeper :encrypted_api_key, :encrypted_api_pass, :encrypted_secret,
+  crypt_keeper :encrypted_api_key, :encrypted_api_pass,
+               :encrypted_secret, :encrypted_webhook_signature,
                encryptor: :active_support,
                key: ENV['CRYPT_KEEPER_KEY'], salt: ENV['CRYPT_KEEPER_SALT']
 

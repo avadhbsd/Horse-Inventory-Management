@@ -28,3 +28,9 @@
 .idea
 coverage
 .env
+
+# Redis
+dump.rdb
+
+# macOS finder configuration
+.DS_STORE
