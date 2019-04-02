@@ -13,7 +13,7 @@ class Product < ApplicationRecord
     shopify_record.variants.each do |s_v|
       puts "Syncing #{product_variants_count} Variants of Product #{id}"
       variant = variants.find_by_id(s_v.attributes[:id])
-      variant ||= variants.build(store_id: id)
+      variant ||= variants.build(store_id: store_id)
       variant.sync(s_v)
     end
     unless shared_product_id?

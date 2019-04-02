@@ -25,21 +25,43 @@ class Store < ApplicationRecord
   end
 
   def sync!
-    s_products = connect_to_shopify do
-      with_retry do
-        ShopifyAPI::Product.find(:all)
-      end
-    end
-    products_count = s_products.count
-    puts "Syncing #{products_count} products..."
-    s_products.each do |s_p|
-      product = products.find_by_id(s_p.attributes[:id])
-      product ||= products.new
-      product.sync!(s_p, skip_validations: true)
-    end
-  end
+		sync_products
+		sync_orders
+	end
 
-  def self.sync_all!
-    Store.all.map(&:sync!)
-  end
+	def self.sync_all!
+		Store.all.map(&:sync!)
+	end
+
+	private
+
+	def sync_products
+		s_products = connect_to_shopify do
+			with_retry do
+				ShopifyAPI::Product.find(:all)
+			end
+		end
+		products_count = s_products.count
+		puts "Syncing #{products_count} products..."
+		s_products.each do |s_p|
+			product = products.find_by_id(s_p.attributes[:id])
+			product ||= products.new
+			product.sync!(s_p, skip_validations: true)
+		end
+	end
+
+	def sync_orders
+		shopify_orders = connect_to_shopify do
+			with_retry do
+				ShopifyAPI::Order.find(:all)
+			end
+		end
+		shopify_orders.each do |shopify_order|
+			order = orders.find(shopify_order.attributes[:id])
+			order ||= orders.new
+			order.sync!(shopify_order, skip_validations:true)
+		end
+	end
+
+
 end

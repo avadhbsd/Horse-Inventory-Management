@@ -4,9 +4,13 @@ module WebhookReceivers
   module Orders
     # Handler for Orders update events.
     class Updated < WebhookReceivers::Base
-      PERMITTED_PARAMS = [].freeze
+      PERMITTED_PARAMS = Create::PERMITTED_PARAMS
 
-      def receive!; end
+			def receive!
+				shopify_order = Order.create_shopify_record(@params)
+				order = Order.find(@params[:id])
+				order.sync!(shopify_order)
+			end
     end
   end
 end

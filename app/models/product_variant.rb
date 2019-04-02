@@ -16,7 +16,7 @@ class ProductVariant < ApplicationRecord
 
   def sync(shopify_record, args={})
     super # populate self with common shopify attributes\
-    self.store_id = product.store_id
+    # self.store_id = product.store_id
     shopify_attrs = shopify_record.attributes
     unless inventory_item.present?
       build_inventory_item(

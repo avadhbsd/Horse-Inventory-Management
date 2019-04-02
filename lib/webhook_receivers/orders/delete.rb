@@ -4,9 +4,11 @@ module WebhookReceivers
   module Orders
     # Handler for Orders delete events.
     class Delete < WebhookReceivers::Base
-      PERMITTED_PARAMS = [].freeze
+      PERMITTED_PARAMS = [:id].freeze
 
-      def receive!; end
+      def receive!
+				@store.orders.destroy(@params[:id])
+			end
     end
   end
 end
