@@ -7,8 +7,8 @@ module WebhookReceivers
       PERMITTED_PARAMS = [:id].freeze
 
       def receive!
-				@store.orders.destroy(@params[:id])
-			end
+        @store.orders.destroy(@params[:id])
+      end
     end
   end
 end
