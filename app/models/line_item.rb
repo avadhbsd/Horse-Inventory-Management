@@ -36,6 +36,7 @@ class LineItem < ApplicationRecord
 
     product_variant = ProductVariant.find_by_id(shopify_line_item
                                               .attributes[:variant_id])
+		return nil unless product_variant
     line_item ||= initialize_line_item(store_id, order_id,
                                        product, product_variant)
     line_item.merge_with(shopify_line_item)

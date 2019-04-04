@@ -7,6 +7,7 @@ module Kernel
       result = yield
     rescue StandardError => e
       retries -= 1
+			puts "retrying"
       raise if retries.zero?
 
       sleep seconds_to_wait(e)

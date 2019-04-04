@@ -41,21 +41,58 @@ class Store < ApplicationRecord
     yield
   end
 
-  def self.sync_all!
-    Store.all.each do |store|
-      store.connect_to_shopify do
-        %i[product order].each do |resource|
-          shopify_resources = fetch_resource_data(resource)
-          resource_klass = resource.to_s.camelize.safe_constantize
-          shopify_resources.each { |s_r| resource_klass.sync!(s_r, store.id) }
-        end
-      end
-    end
-  end
+	def self.sync_all!
+		Store.all.each do |store|
+			[Product, Order].each do |resource_klass|
+				puts "Started syncing process for #{store.title} #{resource_klass.to_s} - #{Time.now.strftime("%H:%M")}"
+				store.connect_to_shopify do
+					resource_count = with_retry do
+						"ShopifyAPI::#{resource_klass.to_s}".constantize.count
+					end
+					created_at_min = nil
+					puts "There are #{resource_klass.to_s} #{resource_count} resources!"
+					loop_count = (resource_count / 250 + 1)
+					loop_count.times do |n|
+						puts "Loop ##{n} out of #{loop_count}"
+						shopify_resources = with_retry do
+							params = {
+									limit: 250, order: "created_at DESC",
+							}
+							# params[:created_at_min] = created_at_min if created_at_min
+							params[:page] = n + 1
+							puts "Params used in this request are #{params.to_s}"
+							puts "Started looking for resources using params  - #{Time.now.strftime("%H:%M")}"
+							return_records = "ShopifyAPI::#{resource_klass.to_s}".constantize.find(
+									:all,
+									params: params
+							)
+							puts "Found #{return_records.count} - #{Time.now.strftime("%H:%M")}"
+							return_records
+						end
+						puts "Started Syncing at - #{Time.now.strftime("%H:%M")}"
+						shopify_resources.each{|s_p| resource_klass.send(:sync!, s_p, store.id)}
+						puts "Synced Successfully - #{Time.now.strftime("%H:%M")}"
+						created_at_min = shopify_resources.last.attributes.try(:[], :created_at)
+					end
+				end
+				puts "Ended syncing process for #{store.title} #{resource_klass.to_s} - #{Time.now.strftime("%H:%M")}"
+			end
+
+		end
+	rescue => e
+		byebug
+	end
 
   def self.fetch_resource_data(resource)
-    with_retry do
-      "ShopifyAPI/#{resource}".camelize.safe_constantize.find(:all)
-    end
+		klass = "ShopifyAPI/#{resource}".camelize.safe_constantize
+		resource_count = klass.count
+		number_of_requests = resource_count / 250
+		number_of_requests.times do
+			resourse_data = with_retry do
+				klass.find(:all, limit: 250)
+			end
+			yield(resourse_data)
+		end
+
   end
 end
