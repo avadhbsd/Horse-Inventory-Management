@@ -29,10 +29,11 @@ class LineItem < ApplicationRecord
   belongs_to :store
 
   def self.sync!(shopify_line_item, store_id, order_id)
-    line_item = where(
-      id: shopify_line_item.attributes[:id], store_id: store_id
-    ).first
+    line_item = where(id: shopify_line_item.attributes[:id],
+                      store_id: store_id).first
     product = Product.find_by_id(shopify_line_item.attributes[:product_id])
+    return nil unless product
+
     product_variant = ProductVariant.find_by_id(shopify_line_item
                                               .attributes[:variant_id])
     line_item ||= initialize_line_item(store_id, order_id,
@@ -52,10 +53,10 @@ class LineItem < ApplicationRecord
   def self.initialize_line_item(store_id, order_id, product, product_variant)
     new(store_id: store_id,
         order_id: order_id,
-        product_id: product.try(:id),
-        shared_product_id: product.try(:shared_product_id),
-        product_variant_id: product_variant.try(:id),
+        product_id: product.id,
+        shared_product_id: product.shared_product_id,
+        product_variant_id: product_variant.id,
         shared_product_variant_id:
-            product_variant.try(:shared_product_variant_id))
+            product_variant.shared_product_variant_id)
   end
 end

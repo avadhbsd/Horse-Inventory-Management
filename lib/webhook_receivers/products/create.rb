@@ -9,7 +9,7 @@ module WebhookReceivers
         :title,
         :vendor,
         :product_type,
-        variants: %i[id title price sku]
+        variants: %i[id title price sku inventory_quantity]
       ].freeze
 
       def receive!
