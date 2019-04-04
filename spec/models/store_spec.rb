@@ -39,7 +39,7 @@ RSpec.describe Store, type: :model do
   end
 
   describe 'Sync All Functionality' do
-    it 'Should call sync! on Product, and send shopify product and store_id' do
+    before do
       Store.create([
                      {
                        title: 'Test 1',
@@ -54,39 +54,45 @@ RSpec.describe Store, type: :model do
                        url: 'store_2.com/admin'
                      }
                    ])
-      stub_request(:get, 'https://store_1.com/admin/products.json')
-        .with(
-          headers: {
-            'Accept' => 'application/json',
-            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'Authorization' => 'Basic a2V5XzE6cGFzc18x',
-            'User-Agent' => 'ShopifyAPI/6.0.0 ActiveResource/5.1.0 Ruby/2.5.1'
-          }
-        )
-        .to_return(status: 200, body: { products:
-         [
-           ShopifyAPI::Product.new
-         ] }.to_json, headers: {})
-      stub_request(:get, 'https://store_2.com/admin/products.json')
-        .with(
-          headers: {
-            'Accept' => 'application/json',
-            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'Authorization' => 'Basic a2V5XzI6cGFzc18y',
-            'User-Agent' => 'ShopifyAPI/6.0.0 ActiveResource/5.1.0 Ruby/2.5.1'
-          }
-        )
-        .to_return(status: 200, body: { products:
-         [
-           ShopifyAPI::Product.new,
-           ShopifyAPI::Product.new,
-           ShopifyAPI::Product.new,
-           ShopifyAPI::Product.new
-         ] }.to_json, headers: {})
+
+      stub_shopify_request('store_1', :products, [ShopifyAPI::Product.new])
+
+      stub_shopify_request('store_2', :products,
+                           [
+                             ShopifyAPI::Product.new,
+                             ShopifyAPI::Product.new,
+                             ShopifyAPI::Product.new,
+                             ShopifyAPI::Product.new
+                           ])
+
+      stub_shopify_request('store_1', :orders,
+                           [ShopifyAPI::Order.new])
+
+      stub_shopify_request('store_2', :orders,
+                           [
+                             ShopifyAPI::Order.new,
+                             ShopifyAPI::Order.new,
+                             ShopifyAPI::Order.new,
+                             ShopifyAPI::Order.new
+                           ])
+
+      allow(Order).to receive(:sync!).with(
+        an_instance_of(ShopifyAPI::Order), an_instance_of(Integer)
+      )
+                                     .and_return(true)
+
       allow(Product).to receive(:sync!).with(
         an_instance_of(ShopifyAPI::Product), an_instance_of(Integer)
-      )
-                                       .and_return(true)
+      ).and_return(true)
+    end
+
+    it 'Should call sync! on Product, and send shopify product and store_id' do
+      expect(Product).to receive(:sync!).exactly(5).times
+      Store.sync_all!
+    end
+
+    it 'Should call sync! on Order, and send shopify order and store_id' do
+      expect(Order).to receive(:sync!).exactly(5).times
       Store.sync_all!
     end
   end

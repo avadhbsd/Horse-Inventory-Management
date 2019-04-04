@@ -15,12 +15,13 @@
 
 # Represents a Shopify Product.
 class Product < ApplicationRecord
-  has_many :variants, class_name: 'ProductVariant'
+  has_many :variants, class_name: 'ProductVariant', dependent: :delete_all
   has_many :line_items
   belongs_to :shared_product, optional: true
   belongs_to :store
 
-  # <<<<<<< HEAD
+  after_destroy :destroy_shared_attributes, if: :last_product?
+
   def self.sync!(shopify_product, store_id)
     product = where(
       id: shopify_product.attributes[:id],
@@ -29,30 +30,40 @@ class Product < ApplicationRecord
     product ||= new(store_id: store_id)
     product.merge_with(shopify_product)
     product.save!
-    variants = shopify_product.variants.map do |s_v|
-      ProductVariant.sync!(s_v, store_id, product.id)
-    end
+    variants = sync_variants(shopify_product, store_id)
+    sync_shared_attributes(shopify_product, variants, product)
+    product
+  end
+
+  def self.create_shopify_record(webhook_params)
+    shopify_product = ShopifyAPI::Product.new
+    shopify_product.attributes = webhook_params.except(:variants)
+    shopify_product.variants =
+      ProductVariant.create_shopify_records(webhook_params[:variants])
+    shopify_product
+  end
+
+  def destroy_shared_attributes
+    shared_product.destroy
+  end
+
+  def last_product?
+    shared_product.products.count.zero?
+  end
+
+  def self.sync_shared_attributes(shopify_product, variants, product)
     shared_product = SharedProduct.sync!(shopify_product)
-    ProductVariant.where(id:
-      variants.map(&:id)).update_all(shared_product_id: shared_product.id)
+    ProductVariant.where(id: variants.map(&:id))
+                  .update_all(shared_product_id: shared_product.id)
     SharedProductVariant.where(
       id: variants.map(&:shared_product_variant_id)
     ).update_all(shared_product_id: shared_product.id)
     product.update_attribute(:shared_product_id, shared_product.id)
-    product
   end
 
-  # =======
-  #   def sync(shopify_record, args={})
-  #     product_variants_count = shopify_record.variants.count
-  #     puts "Syncing #{product_variants_count} Variants of Product #{id}"
-  #     shopify_record.variants.each do |s_v|
-  #       puts "Syncing #{product_variants_count} Variants of Product #{id}"
-  #       variant = variants.find_by_id(s_v.attributes[:id])
-  #       variant ||= variants.build(store_id: store_id)
-  #       variant.sync(s_v)
-  #     end
-  #     unless shared_product_id?
-  #       build_shared_product.sync(shopify_record)
-  # >>>>>>> HRS-16
+  def self.sync_variants(shopify_product, store_id)
+    shopify_product.variants.map do |s_v|
+      ProductVariant.sync!(s_v, store_id, shopify_product.attributes[:id])
+    end
+  end
 end

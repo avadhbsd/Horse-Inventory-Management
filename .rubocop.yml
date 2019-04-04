@@ -15,3 +15,8 @@ Style/ClassAndModuleChildren:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'lib/tasks/auto_annotate_models.rake'
+
+Style/MixinUsage:
+  Exclude:
+    - 'spec/rails_helper.rb'

@@ -21,19 +21,29 @@ class Order < ApplicationRecord
   has_many :product_variants, through: :line_items
   belongs_to :store
 
-  def sync(shopify_record, args = {})
-    super
-    shopify_record.line_items.each do |l_i|
-      line_item = line_items.find_by_id(l_i.attributes[:id])
-      line_item ||= line_items.build(store_id: store_id)
-      line_item.sync!(l_i)
-    end
+  def self.sync!(shopify_order, store_id)
+    order = where(
+      id: shopify_order.attributes[:id],
+      store_id: store_id
+    ).first
+    order ||= new(store_id: store_id)
+    order.merge_with(shopify_order)
+    order.save!
+    sync_line_items(shopify_order, store_id)
+    order
   end
 
   def self.create_shopify_record(webhook_params)
     shopify_order = ShopifyAPI::Order.new
     shopify_order.attributes = webhook_params.except(:line_items)
-    shopify_order.line_items = LineItem.create_shopify_records(webhook_params[:line_items])
+    shopify_order.line_items =
+      LineItem.create_shopify_records(webhook_params[:line_items])
     shopify_order
+  end
+
+  def self.sync_line_items(shopify_order, store_id)
+    shopify_order.line_items.each do |s_l_i|
+      LineItem.sync!(s_l_i, store_id, shopify_order.attributes[:id])
+    end
   end
 end

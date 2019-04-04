@@ -31,45 +31,29 @@ class ProductVariant < ApplicationRecord
 
   scope :with_no_s_p, -> { where(shared_product_id: nil) }
 
-  # <<<<<<< HEAD
   def self.sync!(shopify_variant, store_id, product_id)
     variant = where(
-      id: shopify_variant.attributes[:id],
-      store_id: store_id
+      id: shopify_variant.attributes[:id], store_id: store_id
     ).first
     variant ||= new(store_id: store_id, product_id: product_id)
     variant.merge_with(shopify_variant)
     variant.save!
+    sync_shared_attributes(shopify_variant, variant)
+    variant
+  end
+
+  def self.create_shopify_records(webhook_params)
+    webhook_params.map do |product_variant_params|
+      product_variant = ShopifyAPI::Variant.new
+      product_variant.attributes = product_variant_params
+      product_variant
+    end
+  end
+
+  def self.sync_shared_attributes(shopify_variant, variant)
     shared_product_variant = SharedProductVariant.sync!(shopify_variant)
     variant.update_attribute(
       :shared_product_variant_id, shared_product_variant.id
     )
-    variant
   end
-  # =======
-  #   def sync(shopify_record, args={})
-  #     super # populate self with common shopify attributes\
-  #     # self.store_id = product.store_id
-  #     shopify_attrs = shopify_record.attributes
-  #     unless inventory_item.present?
-  #       build_inventory_item(
-  #         id: shopify_attrs[:inventory_item_id],
-  #         store_id: store_id
-  #       )
-  #     end
-  #     unless shared_product_variant_id?
-  #       shopify_sku = shopify_attrs[:sku]
-  #       shared_product_variant = SharedProductVariant.find_by_sku(shopify_sku)
-  #       if shared_product_variant.present?
-  #         shared_product_id = shared_product_variant.shared_product_id
-  #       else
-  #         shared_product_variant ||= build_shared_product_variant(
-  #           title: shopify_attrs[:title],
-  #           sku: shopify_sku
-  #         )
-  #       end
-  #     end
-  #     self
-  # >>>>>>> HRS-16
-  #   end
 end

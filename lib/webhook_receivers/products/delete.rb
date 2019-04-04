@@ -4,9 +4,11 @@ module WebhookReceivers
   module Products
     # Handler for Products delete events.
     class Delete < WebhookReceivers::Base
-      PERMITTED_PARAMS = [].freeze
+      PERMITTED_PARAMS = [:id].freeze
 
-      def receive!; end
+      def receive!
+        @store.products.destroy(@params[:id])
+      end
     end
   end
 end

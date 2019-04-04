@@ -10,9 +10,8 @@ class WebhooksController < ApplicationController
     webhook_topic = request.headers['X-Shopify-Topic']
     klass = WebhookReceivers::Base.get_subclass_needed(webhook_topic)
     permitted_params = params.permit(klass::PERMITTED_PARAMS).to_h
-    klass.new(store: @store, params: permitted_params).receive!
-    # WebhookWorker.perform_async(params[:store_id],
-    #                             permitted_params, webhook_topic)
+    WebhookWorker.perform_async(params[:store_id],
+                                permitted_params, webhook_topic)
     head :ok
   end
 

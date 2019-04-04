@@ -8,8 +8,7 @@ module WebhookReceivers
 
       def receive!
         shopify_order = Order.create_shopify_record(@params)
-        order = Order.find(@params[:id])
-        order.sync!(shopify_order)
+        Order.sync!(shopify_order, @store.id)
       end
     end
   end

@@ -16,6 +16,8 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'helpers/shopify_dummy_data_helper'
 include ShopifyDummyDataHelper
+require 'helpers/shopify_stub_request_helper'
+include ShopifyStubRequestHelper
 
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)

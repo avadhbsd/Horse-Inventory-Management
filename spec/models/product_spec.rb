@@ -63,7 +63,8 @@ RSpec.describe Product, type: :model do
     end
 
     it 'Should create all corresponding models correctly' do
-      all_skus = @all_products.map { |p| p.variants.map { |v| v.attributes[:sku] } }
+      all_skus = @all_products
+                 .map { |p| p.variants.map { |v| v.attributes[:sku] } }
       all_skus = all_skus.flatten
       uniq_skus = all_skus.uniq
       expect(Product.count).to eq 6
@@ -74,6 +75,19 @@ RSpec.describe Product, type: :model do
       expect(ProductVariant.where(shared_product_id: nil).count).to eq 0
       expect(ProductVariant.where(shared_product_variant_id: nil).count).to eq 0
       expect(SharedProductVariant.where(shared_product_id: nil).count).to eq 0
+    end
+
+    it 'Should delete shared attributes if it is the last product' do
+      expect do
+        @store1product1.destroy
+        @store2product1.destroy
+      end.to change(SharedProduct, :count).by(-1)
+    end
+
+    it 'Should not delete shared attributes if it is not the last product' do
+      expect do
+        @store1product1.destroy
+      end.not_to change(SharedProduct, :count)
     end
   end
 end
