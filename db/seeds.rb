@@ -5,19 +5,21 @@ if create_kigurumi_stores
   puts 'Creating Kigurumi USA & Kigurumi stores'
   Store.create([
                  {
-                   title: 'Kigurumi USA',
-                   url: 'kigurumiusa.myshopify.com/admin/',
-                   encrypted_api_key: ENV['KIGURUMIUSA_KEY'],
-                   encrypted_api_pass: ENV['KIGURUMIUSA_PASS'],
-                   encrypted_secret: ENV['KIGURUMIUSA_SECRET']
+                   title: 'Horse 1',
+                   url: 'horse-dev-store-1.myshopify.com/admin/',
+                   encrypted_api_key: ENV['KEY1'],
+                   encrypted_api_pass: ENV['PASS1'],
+                   encrypted_secret: ENV['SECRET1'],
+									 encrypted_webhook_signature: ENV['WEBHOOK1']
                  },
-                 {
-                   title: 'Kigurumi',
-                   url: 'kigurumi.myshopify.com/admin/',
-                   encrypted_api_key: ENV['KIGURUMI_KEY'],
-                   encrypted_api_pass: ENV['KIGURUMI_PASS'],
-                   encrypted_secret: ENV['KIGURUMI_SECRET']
-                 }
+								 {
+										 title: 'Horse 2',
+										 url: 'horse-dev-store-2.myshopify.com/admin/',
+										 encrypted_api_key: ENV['KEY2'],
+										 encrypted_api_pass: ENV['PASS2'],
+										 encrypted_secret: ENV['SECRET2'],
+										 encrypted_webhook_signature: ENV['WEBHOOK2']
+								 }
                ])
   puts 'Created Kigurumi USA & Kigurumi stores successfully!'
   puts 'Syncing all stores!'

@@ -36,6 +36,7 @@ class ProductVariant < ApplicationRecord
       id: shopify_variant.attributes[:id], store_id: store_id
     ).first
     variant ||= new(store_id: store_id, product_id: product_id)
+		InventoryItem.sync!(shopify_variant, store_id)
     variant.merge_with(shopify_variant)
     variant.save!
     sync_shared_attributes(shopify_variant, variant)

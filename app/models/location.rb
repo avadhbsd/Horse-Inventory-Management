@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-
 # == Schema Information
-# Schema version: 20190327113822
+# Schema version: 20190407133107
 #
 # Table name: locations
 #
@@ -12,10 +11,10 @@
 #  city               :string
 #  country            :string
 #  country_code       :string
+#  name               :string
 #  phone              :string
 #  province           :string
 #  province_code      :string
-#  title              :string
 #  zip                :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -28,4 +27,24 @@ class Location < ApplicationRecord
   has_many :inventory_levels
   belongs_to :store
   belongs_to :shared_location, optional: true
+
+
+	def self.sync!(shopify_location, store_id)
+		location = where(
+				id: shopify_location.attributes[:id],
+				store_id: store_id
+		).first
+		location ||= new(store_id: store_id)
+		location.merge_with(shopify_location)
+		location.save!
+		location
+	end
+
+	def self.create_shopify_record(webhook_params)
+		shopify_location = ShopifyAPI::Location.new
+		shopify_location.attributes = webhook_params
+		shopify_location
+	end
+
+
 end

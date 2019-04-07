@@ -20,4 +20,19 @@ class SharedInventoryLevel < ApplicationRecord
   has_many :inventory_levels
   belongs_to :shared_location
   belongs_to :shared_product_variant
+
+	#
+	# def self.sync!(shopify_inventory_level)
+	# 	location = Location.find(location: shopify_inventory_level.attributes[:location_id])
+	# 	shared_location_id = location.shared_location_id
+	# 	if shared_location_id? # if belongs to a shared location
+	# 		inventory_item = InventoryItem.find(shopify_inventory_level.attributes[:inventory_item_id])
+	# 		shared_product_variant_id = inventory_item.product_variant.shared_product_variant_id
+	# 		shared_inventory_level = SharedInventoryLevel.find_by(
+	# 				shared_product_variant_id: shared_product_variant_id,
+	# 				shared_location: shared_location_id
+	# 		)
+	# 		self.shared_inventory_level_id = shared_inventory_level.id
+	# 	end
+	# end
 end

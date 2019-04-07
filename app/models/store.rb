@@ -72,7 +72,7 @@ class Store < ApplicationRecord
 						puts "Started Syncing at - #{Time.now.strftime("%H:%M")}"
 						shopify_resources.each{|s_p| resource_klass.send(:sync!, s_p, store.id)}
 						puts "Synced Successfully - #{Time.now.strftime("%H:%M")}"
-						created_at_min = shopify_resources.last.attributes.try(:[], :created_at)
+						# created_at_min = shopify_resources.last.attributes.try(:[], :created_at)
 					end
 				end
 				puts "Ended syncing process for #{store.title} #{resource_klass.to_s} - #{Time.now.strftime("%H:%M")}"
