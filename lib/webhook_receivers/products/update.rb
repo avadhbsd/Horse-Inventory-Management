@@ -4,9 +4,12 @@ module WebhookReceivers
   module Products
     # Handler for Products update events.
     class Update < WebhookReceivers::Base
-      PERMITTED_PARAMS = [].freeze
+      PERMITTED_PARAMS = Create::PERMITTED_PARAMS
 
-      def receive!; end
+      def receive!
+        shopify_product = Product.create_shopify_record(@params)
+        Product.sync!(shopify_product, @store.id)
+      end
     end
   end
 end

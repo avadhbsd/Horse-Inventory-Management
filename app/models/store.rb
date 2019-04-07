@@ -1,5 +1,22 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: stores
+#
+#  id                          :bigint(8)        not null, primary key
+#  currency                    :string
+#  encrypted_api_key           :text
+#  encrypted_api_pass          :text
+#  encrypted_secret            :text
+#  encrypted_webhook_signature :text
+#  slug                        :string
+#  title                       :string
+#  url                         :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#
+
 # Represents a Shopify Store.
 class Store < ApplicationRecord
   crypt_keeper :encrypted_api_key, :encrypted_api_pass,
@@ -22,5 +39,29 @@ class Store < ApplicationRecord
                             encrypted_api_pass + '@' +
                             url
     yield
+  end
+
+  def self.sync_all!
+    all.each do |store|
+      %w[Product Order].each do |klass|
+        "ShopifyAPI::#{klass}".constantize.all_in_batches(store: store) do |r_b|
+          r_b.each do |shopify_resource|
+            klass.constantize.sync!(shopify_resource, store.id)
+          end
+        end
+      end
+    end
+  end
+
+  def self.fetch_resource_data(resource)
+    klass = "ShopifyAPI/#{resource}".camelize.safe_constantize
+    resource_count = klass.count
+    number_of_requests = resource_count / 250
+    number_of_requests.times do
+      resourse_data = with_retry do
+        klass.find(:all, limit: 250)
+      end
+      yield(resourse_data)
+    end
   end
 end
