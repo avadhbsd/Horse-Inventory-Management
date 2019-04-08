@@ -28,7 +28,6 @@
             }
         });
     </script>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
   </head>
   <% if current_admin %>
@@ -51,4 +50,6 @@
   <% else %>
     <%= yield %>
   <% end %>
+  <%= javascript_include_tag 'application' %>
+
 </html>
