@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20190327113822
+# Schema version: 20190408142208
 #
 # Table name: orders
 #
@@ -10,6 +10,7 @@
 #  closed_at          :datetime
 #  financial_status   :string
 #  fulfillment_status :string
+#  name               :string           indexed
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  store_id           :bigint(8)        indexed
@@ -20,6 +21,7 @@ class Order < ApplicationRecord
   has_many :line_items, dependent: :delete_all
   has_many :product_variants, through: :line_items
   belongs_to :store
+  before_save :populate_blank_fulfillment_status
 
   def self.sync!(shopify_order, store_id)
     order = find_by_id(shopify_order.attributes[:id])
@@ -45,11 +47,15 @@ class Order < ApplicationRecord
   end
 
   def human_financial_status
-    financial_status.try(:humanize)
+    financial_status.humanize
   end
 
   def human_fulfillment_status
-    fulfillment_status.try(:humanize) || "None"
+    fulfillment_status.humanize
   end
 
+  def populate_blank_fulfillment_status
+    self.fulfillment_status = 'unfulfilled' if fulfillment_status.blank?
+    true
+  end
 end

@@ -13,7 +13,6 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def human_created_at
-    created_at.strftime("%B %-d %Y, %-l:%M %p")
+    created_at.strftime('%B %-d %Y, %-l:%M %p')
   end
-
 end

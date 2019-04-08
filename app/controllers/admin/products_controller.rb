@@ -3,6 +3,6 @@
 # Admin Products Dashboard Controller
 class Admin::ProductsController < AdminController
   def index
-    @page_title = 'Products'
+    @title = 'Products'
   end
 end

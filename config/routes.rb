@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     get '/', to: 'dashboard#index', as: :dashboard
     resources :orders, only: [:index] do
       get 'data', on: :collection,
-      action: :table_data, defaults: { format: 'json' }
+                  action: :table_data, defaults: { format: 'json' }
     end
     resources :products, only: [:index]
   end

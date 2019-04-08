@@ -3,7 +3,8 @@
 # Admin Orders Dashboard Controller
 class Admin::OrdersController < AdminController
   def index
-    @page_title = 'Orders'
+    @title = 'Orders'
+    @subheader = 'Orders Dashboard'
   end
 
   def table_data

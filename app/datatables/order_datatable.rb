@@ -1,30 +1,34 @@
-class OrderDatatable < AjaxDatatablesRails::ActiveRecord
+# frozen_string_literal: true
 
+# :nocov:
+# Order Datatable Class
+class OrderDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
-    # Declare strings in this format: ModelName.column_name
-    # or in aliased_join_table.column_name format
     @view_columns ||= {
-      id: { source: "Order.id", cond: :eq },
-      date: { source: "Order.created_at", cond: :date_range},
-      financial_status: { source: "Order.financial_status", cond: :like },
-      fulfillment_status: { source: "Order.fulfillment_status", cond: :like }
+      number: { source: 'Order.name', cond: :like },
+      store_name: { source: 'Store.title', cond: :string_eq },
+      date: { source: 'Order.created_at', cond: :date_range },
+      financial_status: { source: 'Order.financial_status', cond: :string_eq },
+      fulfillment_status: { source: 'Order.fulfillment_status',
+                            cond: :string_eq }
     }
   end
 
   def data
-    records.map do |record|
+    records.map do |order|
+      store = order.store
       {
-        id: record.id,
-        date: record.human_created_at,
-        financial_status: record.human_financial_status,
-        fulfillment_status: record.human_fulfillment_status,
-        DT_RowId:   record.id
+        number: order.name,
+        store_name: store.title, date: order.human_created_at,
+        financial_status: order.human_financial_status,
+        fulfillment_status: order.human_fulfillment_status, actions: nil,
+        DT_RowId: order.id, order_link: "https://#{store.url}orders/#{order.id}"
       }
     end
   end
 
   def get_raw_records
-    Order.all
+    Order.all.includes(:store).references(:store)
   end
-
 end
+# :nocov:
