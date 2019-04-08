@@ -43,4 +43,13 @@ class Order < ApplicationRecord
       LineItem.sync!(s_l_i, store_id, shopify_order.attributes[:id])
     end
   end
+
+  def human_financial_status
+    financial_status.try(:humanize)
+  end
+
+  def human_fulfillment_status
+    fulfillment_status.try(:humanize) || "None"
+  end
+
 end

@@ -44,6 +44,10 @@ gem 'redis-rails'
 gem 'require_all'
 gem 'shopify_api'
 gem 'sidekiq'
+
+gem 'ajax-datatables-rails'
+gem 'yajl-ruby'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop
   # execution and get a debugger console
