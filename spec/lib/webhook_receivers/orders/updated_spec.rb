@@ -7,7 +7,7 @@ RSpec.describe do
     before do
       @store = Store.create
       @order_params = random_shopify_order_params(@store.id)
-      Order.sync!(Order.create_shopify_record(@order_params), @store.id)
+      Order.sync!(Webhooks.initialize_shopify_order(@order_params), @store.id)
     end
 
     it 'should call sync on order and corresponding models' do

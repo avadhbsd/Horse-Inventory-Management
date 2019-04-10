@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_113822) do
+ActiveRecord::Schema.define(version: 2019_04_07_174459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_113822) do
   end
 
   create_table "inventory_levels", force: :cascade do |t|
-    t.integer "quantity"
+    t.integer "available"
     t.bigint "location_id"
     t.bigint "inventory_item_id"
     t.bigint "shared_inventory_level_id"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_113822) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string "title"
+    t.string "name"
     t.string "phone"
     t.string "address1"
     t.string "address2"

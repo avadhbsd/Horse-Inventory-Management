@@ -15,4 +15,13 @@
 class SharedLocation < ApplicationRecord
   has_many :locations
   has_many :shared_inventory_levels
+
+  def self.create_shared_locations!(locations_to_connect)
+    locations_to_connect.each do |location_data|
+      shared_location = SharedLocation.create(title: location_data[:title])
+      location_data[:location_ids].each do |location_id|
+        Location.update(location_id, shared_location: shared_location)
+      end
+    end
+  end
 end

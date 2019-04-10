@@ -40,14 +40,6 @@ class LineItem < ApplicationRecord
     line_item.save
   end
 
-  def self.create_shopify_records(webhook_params)
-    webhook_params.map do |line_item_params|
-      line_item = ShopifyAPI::LineItem.new
-      line_item.attributes = line_item_params
-      line_item
-    end
-  end
-
   def self.initialize_line_item(store_id, order_id, product, product_variant)
     new(store_id: store_id,
         order_id: order_id,

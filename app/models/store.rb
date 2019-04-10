@@ -41,27 +41,35 @@ class Store < ApplicationRecord
     yield
   end
 
-  def self.sync_all!
+  def self.sync_all!(locations_to_connect = [])
     all.each do |store|
-      %w[Product Order].each do |klass|
-        "ShopifyAPI::#{klass}".constantize.all_in_batches(store: store) do |r_b|
-          r_b.each do |shopify_resource|
-            klass.constantize.sync!(shopify_resource, store.id)
-          end
+      %w[Product Order Location].each do |klass|
+        "ShopifyAPI::#{klass}".constantize.all_in_batches(store) do |r_b|
+          r_b.each { |resource| klass.constantize.sync!(resource, store.id) }
+        end
+      end
+      Webhooks.create_webhooks(store)
+    end
+    SharedLocation.create_shared_locations!(locations_to_connect)
+    sync_inventory_levels!
+  end
+
+  def self.sync_inventory_levels!
+    all.each do |store|
+      store.location_ids.each do |location_id|
+        ShopifyAPI::InventoryLevel.all_in_batches(
+          store,
+          location_ids: location_id
+        ) do |shopify_inventory_levels|
+          sync_inventory_level!(store, shopify_inventory_levels)
         end
       end
     end
   end
 
-  def self.fetch_resource_data(resource)
-    klass = "ShopifyAPI/#{resource}".camelize.safe_constantize
-    resource_count = klass.count
-    number_of_requests = resource_count / 250
-    number_of_requests.times do
-      resourse_data = with_retry do
-        klass.find(:all, limit: 250)
-      end
-      yield(resourse_data)
+  def self.sync_inventory_level!(store, shopify_inventory_levels)
+    shopify_inventory_levels.each do |shopify_inventory_level|
+      InventoryLevel.sync!(shopify_inventory_level, store.id)
     end
   end
 end

@@ -15,7 +15,7 @@
 
 # Represents a Shopify Product.
 class Product < ApplicationRecord
-  has_many :variants, class_name: 'ProductVariant', dependent: :delete_all
+  has_many :variants, class_name: 'ProductVariant', dependent: :destroy
   has_many :line_items
   belongs_to :shared_product, optional: true
   belongs_to :store
@@ -30,14 +30,6 @@ class Product < ApplicationRecord
     variants = sync_variants(shopify_product, store_id)
     sync_shared_attributes(shopify_product, variants, product)
     product
-  end
-
-  def self.create_shopify_record(webhook_params)
-    shopify_product = ShopifyAPI::Product.new
-    shopify_product.attributes = webhook_params.except(:variants)
-    shopify_product.variants =
-      ProductVariant.create_shopify_records(webhook_params[:variants])
-    shopify_product
   end
 
   def destroy_shared_attributes

@@ -80,12 +80,32 @@ RSpec.describe Store, type: :model do
                         ShopifyAPI::Order.new
                       ])
 
+      shopify_request('store_1.com/admin', :locations,
+                      [
+                        ShopifyAPI::Location.new
+                      ])
+
+      shopify_request('store_2.com/admin', :locations,
+                      [
+                        ShopifyAPI::Location.new,
+                        ShopifyAPI::Location.new,
+                        ShopifyAPI::Location.new,
+                        ShopifyAPI::Location.new
+                      ])
+
+      post_shopify_request('store_1.com/admin', :webhooks)
+      post_shopify_request('store_2.com/admin', :webhooks)
+
       allow(Order).to receive(:sync!).with(
         an_instance_of(ShopifyAPI::Order), an_instance_of(Integer)
       ).and_return(true)
 
       allow(Product).to receive(:sync!).with(
         an_instance_of(ShopifyAPI::Product), an_instance_of(Integer)
+      ).and_return(true)
+
+      allow(Location).to receive(:sync!).with(
+        an_instance_of(ShopifyAPI::Location), an_instance_of(Integer)
       ).and_return(true)
     end
 
@@ -97,6 +117,44 @@ RSpec.describe Store, type: :model do
     it 'Should call sync! on Order, and send shopify order and store_id' do
       expect(Order).to receive(:sync!).exactly(5).times
       Store.sync_all!
+    end
+
+    it 'Should call sync! on Location, send shopify location and store_id' do
+      expect(Location).to receive(:sync!).exactly(5).times
+      Store.sync_all!
+    end
+
+    it 'Should create webhooks for all stores' do
+      Store.sync_all!
+      expect(WebMock).to have_requested(
+        :post,
+        'https://store_1.com/admin/webhooks.json'
+      )
+        .times(10)
+      expect(WebMock).to have_requested(
+        :post,
+        'https://store_2.com/admin/webhooks.json'
+      )
+        .times(10)
+    end
+
+    it 'should create shared locations' do
+      location1 = Store.first.locations.create
+      location2 = Store.second.locations.create
+      shopify_request('store_1.com/admin', :inventory_levels,
+                      [], location_ids: location1.id)
+      shopify_request('store_2.com/admin', :inventory_levels,
+                      [], location_ids: location2.id)
+      locations_to_connect = []
+      locations_to_connect << { title: 'shared',
+                                location_ids:
+                                    [
+                                      location1.id,
+                                      location2.id
+                                    ] }
+      expect do
+        Store.sync_all!(locations_to_connect)
+      end.to change(SharedLocation, :count).by(1)
     end
   end
 end

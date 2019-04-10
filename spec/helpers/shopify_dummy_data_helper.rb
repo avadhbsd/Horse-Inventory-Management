@@ -5,19 +5,21 @@ module ShopifyDummyDataHelper
     product = random_product_params
     product[:variants] = []
     skus = args[:like].variants.map { |v| v.attributes[:sku] } if args[:like]
-    Faker::Number.within(1..10).times do |n|
+    number_of_variants = args[:number_of_variants] ||
+                         Faker::Number.within(1..10)
+    number_of_variants.times do |n|
       product[:variants] << random_product_variant_params(product, skus, n)
     end
     product
   end
 
   def random_shopify_product(args = {})
-    Product.create_shopify_record(random_shopify_product_params(args))
+    Webhooks.initialize_shopify_product(random_shopify_product_params(args))
   end
 
   def random_shopify_order_params(store_id)
     product = random_shopify_product_params
-    Product.sync!(Product.create_shopify_record(product), store_id)
+    Product.sync!(Webhooks.initialize_shopify_product(product), store_id)
     order = random_order_params
     order[:line_items] = []
     Faker::Number.within(1..10).times do |_n|
@@ -27,7 +29,7 @@ module ShopifyDummyDataHelper
   end
 
   def random_shopify_order(store_id)
-    Order.create_shopify_record(random_shopify_order_params(store_id))
+    Webhooks.initialize_shopify_order(random_shopify_order_params(store_id))
   end
 
   private
@@ -46,7 +48,8 @@ module ShopifyDummyDataHelper
       id: Faker::Number.number(10),
       title: Faker::Commerce.product_name,
       price: Faker::Number.within(1..10),
-      sku: skus.try(:[], number) || "#{product[:id]}-variant-#{number}"
+      sku: skus.try(:[], number) || "#{product[:id]}-variant-#{number}",
+      inventory_item_id: Faker::Number.number(10)
     }
   end
 

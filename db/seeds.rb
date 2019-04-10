@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# frozen_string_literal: true
+
 create_kigurumi_stores = true
 if create_kigurumi_stores
   puts 'Creating Kigurumi USA & Kigurumi stores'
@@ -21,5 +23,13 @@ if create_kigurumi_stores
                ])
   puts 'Created Kigurumi USA & Kigurumi stores successfully!'
   puts 'Syncing all stores!'
-  Store.sync_all!
+
+  locations_to_connect = []
+  locations_to_connect << { title: 'Pham Warehouse Shared Location',
+                            location_ids:
+                                [
+                                  33_245_377,
+                                  43_143_245
+                                ] }
+  Store.sync_all!(locations_to_connect)
 end

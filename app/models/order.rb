@@ -30,14 +30,6 @@ class Order < ApplicationRecord
     order
   end
 
-  def self.create_shopify_record(webhook_params)
-    shopify_order = ShopifyAPI::Order.new
-    shopify_order.attributes = webhook_params.except(:line_items)
-    shopify_order.line_items =
-      LineItem.create_shopify_records(webhook_params[:line_items])
-    shopify_order
-  end
-
   def self.sync_line_items(shopify_order, store_id)
     shopify_order.line_items.each do |s_l_i|
       LineItem.sync!(s_l_i, store_id, shopify_order.attributes[:id])

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     sign_out: 'logout'
   }, controllers: { sessions: 'sessions' }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  post ':store_id/webhook', to: 'webhooks#webhook'
+  post ':store_id/webhook', to: 'webhooks#webhook', as: 'webhooks'
 
   root to: 'home#index'
 

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe WebhooksController, type: :controller do
   describe 'post' do
     before do
-      @store = Store.create(encrypted_webhook_signature: '123')
+      @store = Store.create(encrypted_secret: '123')
       allow(Base64).to receive(:encode64).and_return('1')
     end
 

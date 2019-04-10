@@ -27,7 +27,7 @@ class WebhooksController < ApplicationController
     digest = OpenSSL::Digest.new('sha256')
     Base64.encode64(
       OpenSSL::HMAC.digest(digest,
-                           @store.encrypted_webhook_signature,
+                           @store.encrypted_secret,
                            request.body.read)
     ).strip
   end

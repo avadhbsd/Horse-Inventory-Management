@@ -58,7 +58,7 @@ RSpec.describe Order, type: :model do
     context 'when an old order should be updated' do
       before do
         @order_params = random_shopify_order_params(@store.id)
-        @order = Order.sync!(Order.create_shopify_record(@order_params),
+        @order = Order.sync!(Webhooks.initialize_shopify_order(@order_params),
                              @store.id)
       end
 
@@ -67,7 +67,7 @@ RSpec.describe Order, type: :model do
         @order_params[:closed_at] = Date.current
         @order_params[:fulfillment_status] = 'new'
         @order_params[:cancelled_at] = Date.current
-        Order.sync!(Order.create_shopify_record(@order_params), @store.id)
+        Order.sync!(Webhooks.initialize_shopify_order(@order_params), @store.id)
         @order.reload
         expect(@order.financial_status).to eq 'new'
         expect(@order.closed_at).to eq Date.current
@@ -80,7 +80,7 @@ RSpec.describe Order, type: :model do
         line_items_params[:fulfillable_quantity] = 33
         line_items_params[:quantity] = 22
         line_items_params[:fulfillment_status] = 'new'
-        Order.sync!(Order.create_shopify_record(@order_params), @store.id)
+        Order.sync!(Webhooks.initialize_shopify_order(@order_params), @store.id)
         @order.reload
         line_item_id = line_items_params[:id]
         expect(@order.line_items.find(line_item_id).fulfillment_status)

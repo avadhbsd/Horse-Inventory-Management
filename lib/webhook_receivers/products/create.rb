@@ -9,11 +9,11 @@ module WebhookReceivers
         :title,
         :vendor,
         :product_type,
-        variants: %i[id title price sku inventory_quantity]
+        variants: %i[id title price sku inventory_quantity inventory_item_id]
       ].freeze
 
       def receive!
-        shopify_product = Product.create_shopify_record(@params)
+        shopify_product = Webhooks.initialize_shopify_product(@params)
         Product.sync!(shopify_product, @store.id)
       end
     end

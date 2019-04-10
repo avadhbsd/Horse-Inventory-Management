@@ -7,7 +7,7 @@ module WebhookReceivers
       PERMITTED_PARAMS = Create::PERMITTED_PARAMS
 
       def receive!
-        shopify_product = Product.create_shopify_record(@params)
+        shopify_product = Webhooks.initialize_shopify_product(@params)
         Product.sync!(shopify_product, @store.id)
       end
     end

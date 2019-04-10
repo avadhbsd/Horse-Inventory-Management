@@ -19,7 +19,7 @@
 
 # Represents a Shopify ProductVariant.
 class ProductVariant < ApplicationRecord
-  has_one :inventory_item
+  has_one :inventory_item, dependent: :destroy
   has_many :inventory_levels
   has_many :line_items
   has_many :orders, through: :line_items
@@ -36,16 +36,9 @@ class ProductVariant < ApplicationRecord
     variant ||= new(store_id: store_id, product_id: product_id)
     variant.merge_with(shopify_variant)
     variant.save!
+    InventoryItem.sync!(shopify_variant, store_id)
     sync_shared_attributes(shopify_variant, variant)
     variant
-  end
-
-  def self.create_shopify_records(webhook_params)
-    webhook_params.map do |product_variant_params|
-      product_variant = ShopifyAPI::Variant.new
-      product_variant.attributes = product_variant_params
-      product_variant
-    end
   end
 
   def self.sync_shared_attributes(shopify_variant, variant)

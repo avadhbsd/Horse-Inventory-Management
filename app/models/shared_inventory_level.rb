@@ -20,4 +20,30 @@ class SharedInventoryLevel < ApplicationRecord
   has_many :inventory_levels
   belongs_to :shared_location
   belongs_to :shared_product_variant
+
+  def self.sync!(inventory_level)
+    shared_location_id = inventory_level.location.shared_location_id
+    return nil unless shared_location_id
+
+    # belongs to a shared location
+    shared_product_variant_id = inventory_level.shared_product_variant_id ||
+                                inventory_level
+                                .inventory_item
+                                .product_variant
+                                .shared_product_variant_id
+    SharedInventoryLevel.find_or_create(shared_product_variant_id,
+                                        shared_location_id)
+  end
+
+  def self.find_or_create(shared_product_variant_id, shared_location_id)
+    shared_inventory_level = SharedInventoryLevel.where(
+      shared_product_variant_id: shared_product_variant_id,
+      shared_location: shared_location_id
+    ).first
+    shared_inventory_level ||= new(shared_location_id: shared_location_id,
+                                   shared_product_variant_id:
+                                       shared_product_variant_id)
+    shared_inventory_level.save!
+    shared_inventory_level
+  end
 end

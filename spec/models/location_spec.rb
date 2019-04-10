@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20190327113822
+# Schema version: 20190407161725
 #
 # Table name: locations
 #
@@ -12,10 +12,10 @@
 #  city               :string
 #  country            :string
 #  country_code       :string
+#  name               :string
 #  phone              :string
 #  province           :string
 #  province_code      :string
-#  title              :string
 #  zip                :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

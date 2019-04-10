@@ -17,4 +17,15 @@ class InventoryItem < ApplicationRecord
   has_many :inventory_levels
   belongs_to :product_variant
   belongs_to :store
+
+  def self.sync!(shopify_variant, store_id)
+    inventory_item = find_by_id(
+      shopify_variant.attributes[:inventory_item_id]
+    )
+    inventory_item ||= new(store_id: store_id,
+                           id: shopify_variant.attributes[:inventory_item_id],
+                           product_variant_id: shopify_variant.attributes[:id])
+    inventory_item.save!
+    inventory_item
+  end
 end

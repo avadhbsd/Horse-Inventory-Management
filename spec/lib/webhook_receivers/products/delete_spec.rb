@@ -7,7 +7,9 @@ RSpec.describe do
     before do
       @store = Store.create
       @product_params = random_shopify_product_params
-      Product.sync!(Product.create_shopify_record(@product_params), @store.id)
+      Product.sync!(Webhooks.initialize_shopify_product(
+                      @product_params
+                    ), @store.id)
     end
 
     it 'should delete a product' do
