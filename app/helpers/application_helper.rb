@@ -3,6 +3,6 @@
 # Horse application helper
 module ApplicationHelper
   def page_title
-    '| ' + @page_title if @page_title.present?
+    '| ' + @title if @title.present?
   end
 end

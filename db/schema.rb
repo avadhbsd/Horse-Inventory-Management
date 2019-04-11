@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_07_174459) do
+ActiveRecord::Schema.define(version: 2019_04_08_142208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,8 @@ ActiveRecord::Schema.define(version: 2019_04_07_174459) do
     t.bigint "store_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["name"], name: "index_orders_on_name"
     t.index ["store_id"], name: "index_orders_on_store_id"
   end
 
@@ -132,7 +134,7 @@ ActiveRecord::Schema.define(version: 2019_04_07_174459) do
   end
 
   create_table "shared_inventory_levels", force: :cascade do |t|
-    t.integer "quantity"
+    t.integer "available"
     t.bigint "shared_location_id"
     t.bigint "shared_product_variant_id"
     t.datetime "created_at", null: false

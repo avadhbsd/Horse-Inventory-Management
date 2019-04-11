@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20190327113822
+# Schema version: 20190408142208
 #
 # Table name: orders
 #
@@ -10,6 +10,7 @@
 #  closed_at          :datetime
 #  financial_status   :string
 #  fulfillment_status :string
+#  name               :string           indexed
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  store_id           :bigint(8)        indexed

@@ -41,4 +41,5 @@
  *= require keen/skins_brand_light
  *= require keen/skins_aside_light
  *= require keen/style.bundle
+ *= require custom/datatables/datatables.bundle
  */

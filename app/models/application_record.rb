@@ -11,4 +11,8 @@ class ApplicationRecord < ActiveRecord::Base
     assign_attributes(relevant_attrs)
     self
   end
+
+  def human_created_at
+    created_at.strftime('%B %-d %Y, %-l:%M %p')
+  end
 end

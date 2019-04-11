@@ -1,28 +1,5 @@
 @charset "UTF-8";
-/*
-$kt-media-breakpoints: (
-    // Small screen / phone
-    sm: 576px,
-    
-    // Medium screen / tablet
-    md: 768px,
-    
-    // Large screen / desktop
-    lg: 1024px,
-    
-    // Extra large screen / wide desktop
-    xl: 1200px,
 
-    // Extra large screen / wide desktop
-    xxl: 1600px
-)!default;
-*/
-/*!
- * Bootstrap v4.2.1 (https://getbootstrap.com/)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -13725,7 +13702,7 @@ code {
       border: 2px solid #5867dd; }
   .kt-badge.kt-badge--success {
     color: #ffffff;
-    background: #1dc9b7; }
+    background: #08a56c ; }
   .kt-badge.kt-badge--outline.kt-badge--success {
     background: transparent;
     color: #1dc9b7;

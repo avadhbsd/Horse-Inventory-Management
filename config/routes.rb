@@ -12,5 +12,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/', to: 'dashboard#index', as: :dashboard
+    resources :orders, only: [:index] do
+      get 'data', on: :collection,
+                  action: :table_data, defaults: { format: 'json' }
+    end
+    resources :products, only: [:index]
   end
 end

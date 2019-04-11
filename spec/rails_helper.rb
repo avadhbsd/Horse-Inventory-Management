@@ -14,10 +14,12 @@ if Rails.env.production?
 end
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'helpers/shopify_dummy_data_helper'
+require 'spec_helpers/shopify_dummy_data_helper'
 include ShopifyDummyDataHelper
-require 'helpers/shopify_stub_request_helper'
+require 'spec_helpers/shopify_stub_request_helper'
 include ShopifyStubRequestHelper
+require 'spec_helpers/dummy_admin_helper'
+include DummyAdminHelper
 
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
@@ -50,6 +52,7 @@ RSpec.configure do |config|
 
   config.include(Shoulda::Matchers::ActiveModel, type: :model)
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
+  config.include(Devise::Test::ControllerHelpers, type: :controller)
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
