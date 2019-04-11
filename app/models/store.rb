@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20190411135512
 #
 # Table name: stores
 #
-#  id                          :bigint(8)        not null, primary key
-#  currency                    :string
-#  encrypted_api_key           :text
-#  encrypted_api_pass          :text
-#  encrypted_secret            :text
-#  encrypted_webhook_signature :text
-#  slug                        :string
-#  title                       :string
-#  url                         :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
+#  id                 :bigint(8)        not null, primary key
+#  currency           :string
+#  encrypted_api_key  :text
+#  encrypted_api_pass :text
+#  encrypted_secret   :text
+#  slug               :string
+#  title              :string
+#  url                :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 
 # Represents a Shopify Store.
 class Store < ApplicationRecord
   crypt_keeper :encrypted_api_key, :encrypted_api_pass,
-               :encrypted_secret, :encrypted_webhook_signature,
+               :encrypted_secret,
                encryptor: :active_support,
                key: ENV['CRYPT_KEEPER_KEY'], salt: ENV['CRYPT_KEEPER_SALT']
 
