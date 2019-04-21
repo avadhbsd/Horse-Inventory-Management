@@ -1,0 +1,43 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+
+  horse:
+    build: .
+    entrypoint: /app/docker-entrypoint.sh
+    command: bundle exec rails s
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+
+  sidekiq:
+    depends_on:
+      - db
+      - redis
+    build: .
+    command: bundle exec sidekiq
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    links:
+      - db
+      - redis
+
+  redis:
+    image: redis
+    command: redis-server
+    volumes:
+      - redis:/data
+
+volumes:
+  postgresdata: {}
+  redis: {}
