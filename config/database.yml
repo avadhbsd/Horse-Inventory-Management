@@ -1,5 +1,6 @@
 default: &default
   adapter: postgresql
+  host: <%= ENV.fetch('DATABASE_SERVER_NAME') {'db'} %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: <%= ENV.fetch('DATABASE_ROLE_NAME') {'rubikalinc'} %>
   password:
