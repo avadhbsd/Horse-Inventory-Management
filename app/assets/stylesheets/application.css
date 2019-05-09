@@ -32,6 +32,7 @@
  *= require general/morris.js/morris
  *= require general/sweetalert2/dist/sweetalert2
  *= require general/socicon/css/socicon
+ *= require general/select2/select2.min
  *= require custom/vendors/line-awesome/css/line-awesome
  *= require custom/vendors/flaticon/flaticon
  *= require custom/vendors/flaticon2/flaticon
@@ -42,4 +43,5 @@
  *= require keen/skins_aside_light
  *= require keen/style.bundle
  *= require custom/datatables/datatables.bundle
+ *= require keen/grid.default
  */

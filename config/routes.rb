@@ -16,6 +16,15 @@ Rails.application.routes.draw do
       get 'data', on: :collection,
                   action: :table_data, defaults: { format: 'json' }
     end
-    resources :products, only: [:index]
+    resources :products, only: %i[index show] do
+      get 'data', on: :collection,
+                  action: :table_data, defaults: { format: 'json' }
+      resources :variants, only: %i[show] do
+        get 'data', on: :collection,
+                    action: :table_data, defaults: { format: 'json' }
+      end
+    end
+    get 'inventory', to: 'inventory#index', as: :inventory
+    get 'inventory_data', to: 'inventory#table_data', as: :inventory_data
   end
 end

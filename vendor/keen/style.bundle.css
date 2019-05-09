@@ -398,7 +398,7 @@ mark,
   background-color: #fff;
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
-  max-width: 100%;
+  width: 80px;
   height: auto; }
 
 .figure {
@@ -16604,9 +16604,9 @@ code {
       width: 40px;
       height: 40px; }
     .kt-user-card-v2 .kt-user-card-v2__pic img {
-      border-radius: 50%;
-      max-width: 40px;
-      max-height: 40px; }
+      /*border-radius: 50%;*/
+      max-width: 120px;
+      max-height: 120px; }
   .kt-user-card-v2 .kt-user-card-v2__details {
     line-height: 0; }
     .kt-user-card-v2 .kt-user-card-v2__details .kt-user-card-v2__name {

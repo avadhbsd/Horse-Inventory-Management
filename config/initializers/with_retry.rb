@@ -18,7 +18,7 @@ module Kernel
 
   def seconds_to_wait(error)
     # Retry-After is returned when error code is 429.
-    (error.response['Retry-After'] || 2).to_i
+    (error.response.try(:[], 'Retry-After') || 2).to_i
   end
 
   def log_time(message)

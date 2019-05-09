@@ -52,7 +52,11 @@ class Product < ApplicationRecord
 
   def self.sync_variants(shopify_product, store_id)
     shopify_product.variants.map do |s_v|
-      ProductVariant.sync!(s_v, store_id, shopify_product.attributes[:id])
+      images = shopify_product.images
+      image = images.find { |x| x.attributes[:id] == s_v.image_id }
+      image_url = image.try(:attributes).try(:[], :src)
+      ProductVariant.sync!(s_v, store_id, image_url,
+                           shopify_product.attributes[:id])
     end
   end
 end

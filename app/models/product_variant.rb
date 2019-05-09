@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20190327113822
+# Schema version: 20190418175432
 #
 # Table name: product_variants
 #
 #  id                        :bigint(8)        not null, primary key
+#  image_url                 :string
 #  inventory_quantity        :integer          default(0), not null
 #  price                     :float
 #  title                     :string
@@ -31,20 +32,27 @@ class ProductVariant < ApplicationRecord
 
   scope :with_no_s_p, -> { where(shared_product_id: nil) }
 
-  def self.sync!(shopify_variant, store_id, product_id)
+  after_save :update_shared_product_variant_inventory_quantity
+
+  def self.sync!(shopify_variant, store_id, image_url, product_id)
     variant = find_by_id(shopify_variant.attributes[:id])
     variant ||= new(store_id: store_id, product_id: product_id)
     variant.merge_with(shopify_variant)
+    variant.image_url = image_url
     variant.save!
     InventoryItem.sync!(shopify_variant, store_id)
-    sync_shared_attributes(shopify_variant, variant)
+    sync_shared_attributes(shopify_variant, variant, image_url)
     variant
   end
 
-  def self.sync_shared_attributes(shopify_variant, variant)
-    shared_product_variant = SharedProductVariant.sync!(shopify_variant)
+  def self.sync_shared_attributes(shopify_variant, variant, image_url)
+    s_p_v = SharedProductVariant.sync!(shopify_variant, image_url)
     variant.update_attribute(
-      :shared_product_variant_id, shared_product_variant.id
+      :shared_product_variant_id, s_p_v.id
     )
+  end
+
+  def update_shared_product_variant_inventory_quantity
+    shared_product_variant.try(:update_inventory_quantity!)
   end
 end

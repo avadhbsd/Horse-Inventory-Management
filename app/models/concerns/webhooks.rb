@@ -22,9 +22,10 @@ module Webhooks
 
   def self.initialize_shopify_product(webhook_params)
     shopify_product = ShopifyAPI::Product.new
-    shopify_product.attributes = webhook_params.except(:variants)
+    shopify_product.attributes = webhook_params.except(:variants, :images)
     shopify_product.variants =
       initialize_shopify_variants(webhook_params[:variants])
+    shopify_product.images = initialize_shopify_images(webhook_params[:images])
     shopify_product
   end
 
@@ -33,6 +34,14 @@ module Webhooks
       product_variant = ShopifyAPI::Variant.new
       product_variant.attributes = product_variant_params
       product_variant
+    end
+  end
+
+  def self.initialize_shopify_images(webhook_params)
+    webhook_params.map do |image_params|
+      image = ShopifyAPI::Image.new
+      image.attributes = image_params
+      image
     end
   end
 

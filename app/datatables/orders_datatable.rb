@@ -2,7 +2,7 @@
 
 # :nocov:
 # Order Datatable Class
-class OrderDatatable < AjaxDatatablesRails::ActiveRecord
+class OrdersDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       number: { source: 'Order.name', cond: :like },

@@ -9,7 +9,7 @@ class Admin::OrdersController < AdminController
 
   def table_data
     respond_to do |format|
-      format.json { render json: OrderDatatable.new(params) }
+      format.json { render json: OrdersDatatable.new(params) }
     end
   end
 end

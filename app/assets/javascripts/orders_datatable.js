@@ -1,13 +1,13 @@
 "use strict";
-const KTDatatablesBasicBasic = function() {
+const OrdersDatatable = function() {
   $.fn.dataTable.Api.register('column().title()', function() {
     return $(this.header()).text().trim();
   });
 
-  const renderOrderDataTable = function() {
-    const table_element = $('#order_datatable')
+  const renderOrdersDataTable = function() {
+    const table_element = $('#orders_datatable')
 
-    if (!$('#order_datatable')) {
+    if (!$('#orders_datatable')) {
       return true;
     }
     // begin first table
@@ -168,11 +168,11 @@ const KTDatatablesBasicBasic = function() {
 
     //main function to initiate the module
     init: function() {
-      renderOrderDataTable();
+      renderOrdersDataTable();
     }
   };
 }();
 
 jQuery(document).ready(function() {
-  KTDatatablesBasicBasic.init();
+  OrdersDatatable.init();
 });

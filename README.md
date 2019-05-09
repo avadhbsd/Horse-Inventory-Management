@@ -1,4 +1,4 @@
-![Horse Logo](app/assets/images/brand/resized_logo.jpg)
+![Horse Logo](app/assets/images/admin/resized_logo.jpg)
 
 # Horse
 
@@ -29,7 +29,7 @@ We are currently testing
 * Controllers
 * Helpers
 
-Current test coverage: **93.57%**
+Current test coverage: **93.44%**
 
 In order to run all of the tests, simply run the following:
 ```

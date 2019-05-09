@@ -1,1 +1,32 @@
-<h1>Main Dashboard is here!</h1>
+<div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="kt-portlet">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              Orders in the last 90 Days
+            </h3>
+          </div>
+        </div>
+        <div class="kt-portlet__body">
+          <%= column_chart Order.joins(:store).group("stores.title").group_by_day(:created_at, last: 90, format: "%b %d").count, stacked: true %>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="kt-portlet">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              Orders in the last 90 Days - Financial Status
+            </h3>
+          </div>
+        </div>
+        <div class="kt-portlet__body">
+          <%= pie_chart Order.where("created_at > ?", 90.days.ago).group("financial_status").count.transform_keys(&:titleize), donut: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

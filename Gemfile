@@ -46,7 +46,10 @@ gem 'shopify_api'
 gem 'sidekiq'
 
 gem 'ajax-datatables-rails'
-gem 'yajl-ruby'
+gem 'yajl-ruby', require: 'yajl'
+
+gem 'chartkick'
+gem 'groupdate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop

@@ -29,6 +29,13 @@ class InventoryLevel < ApplicationRecord
 
   after_update :update_other_inventory_levels
 
+  scope :shared, lambda {
+                   where('shared_inventory_level_id IS NOT NULL').order(
+                     'inventory_levels.available ASC'
+                   )
+                 }
+  scope :not_shared, -> { where(shared_inventory_level_id: nil) }
+
   # this function takes a shopify_inventory_level and saves
   # it in Horse database.
   def self.sync!(shopify_inventory_level, store_id)
@@ -82,5 +89,9 @@ class InventoryLevel < ApplicationRecord
     with_retry do
       shopify_inventory_level.set(new_available)
     end
+  end
+
+  def shared?
+    shared_inventory_level_id?
   end
 end

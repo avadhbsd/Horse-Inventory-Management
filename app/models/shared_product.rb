@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20190416015516
 #
 # Table name: shared_products
 #
 #  id           :bigint(8)        not null, primary key
+#  image_url    :string
 #  product_type :string
+#  s_p_v_count  :integer          default(0)
 #  title        :string
 #  vendor       :string
 #  created_at   :datetime         not null
@@ -48,7 +51,15 @@ class SharedProduct < ApplicationRecord
     new(
       title: shopify_product.attributes[:title],
       vendor: shopify_product.attributes[:vendor],
-      product_type: shopify_product.attributes[:product_type]
+      product_type: shopify_product.attributes[:product_type],
+      image_url: shopify_product.attributes[:image]
+                  .try(:attributes).try(:[], :src)
     )
+  end
+
+  def self.reset_all_counter_caches!
+    find_each do |shared_product|
+      reset_counters(shared_product.id, :shared_product_variants)
+    end
   end
 end

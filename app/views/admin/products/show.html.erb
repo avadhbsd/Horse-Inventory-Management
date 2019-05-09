@@ -1,0 +1,77 @@
+<div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
+  <div class="row" data-sticky-container>
+    <div class="col-lg-4">
+      <div class="kt-portlet kt-portlet--contain">
+        <div class="kt-blog-grid">
+          <div class="kt-blog-grid__head">
+            <a class="kt-blog-grid__thumb-link">
+              <%= image_tag((@product.image_url || 'admin/placeholder.png'), class: "kt-blog-grid__image") %>
+            </a>
+          </div>
+          <div class="kt-portlet__body">
+            <div class="kt-blog-grid__body">
+                <h4 class="kt-blog-grid__title">
+                    Product Details
+                </h4>
+                <div class="kt-blog-grid__content">
+                  <ul>
+                    <li>
+                      Title: <b> <%= @product.title %> </b>
+                    </li>
+                    <li>
+                      Product Type: <b> <%= @product.product_type %> </b>
+                    </li>
+                    <li>
+                      Vendor: <b> <%= @product.vendor %> </b>
+                    </li>
+                  </ul>
+                </div>
+                <div class="accordion accordion-outline" id="accordionExample4">
+                  <div class="card">
+                    <div class="card-header" id="headingOne4">
+                      <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne4" aria-expanded="false" aria-controls="collapseOne4"> <i class="la la-external-link"></i>View in <%= @stores_count %> Shopify <%= "Store".pluralize(@stores_count) %></div>
+                    </div>
+                    <div id="collapseOne4" class="card-body-wrapper collapse" aria-labelledby="headingOne" data-parent="#accordionExample4">
+                      <div class="card-body">
+                        <% @product.products.includes(:store).each do |p_i| %>
+                          <a href='<%="https://#{p_i.store.url}products/#{p_i.id}"%>' target="_blank "> <%= p_i.store.title %> Store </a>
+                          <br>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="kt-portlet kt-portlet--contain">
+        <div class="kt-blog-grid">
+          <div class="kt-portlet__body">
+            <div class="kt-blog-grid__body">
+              <h4 class="kt-blog-grid__title">
+                  Variants
+              </h4>
+              <div class="kt-content kt-grid__item kt-grid__item--fluid">
+               <table class="table table-striped- table-bordered table-hover" id="product_variants_datatable" data-source="<%= data_admin_product_variants_path(product_id: @product.id) %>">
+                 <thead>
+                   <tr>
+                     <th>Title</th>
+                     <th>SKU</th>
+                     <th>Inventory Quantity</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                 </tbody>
+               </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

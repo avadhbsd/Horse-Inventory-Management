@@ -9,7 +9,11 @@ module WebhookReceivers
         :title,
         :vendor,
         :product_type,
-        variants: %i[id title price sku inventory_quantity inventory_item_id]
+        variants: %i[
+          id title price sku inventory_quantity
+          inventory_item_id image_id
+        ],
+        images: [:id, :src, variant_ids: []]
       ].freeze
 
       def receive!

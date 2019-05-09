@@ -17,7 +17,7 @@ RSpec.describe WebhooksController, type: :controller do
           post :webhook, params: {
             store_id: @store.id
           }
-        end.to raise_error
+        end.to raise_error(RuntimeError)
       end
 
       it 'should return 200 when hmac is valid' do

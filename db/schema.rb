@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_11_135512) do
+ActiveRecord::Schema.define(version: 2019_04_18_175432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2019_04_11_135512) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "inventory_quantity", default: 0, null: false
+    t.string "image_url"
     t.index ["product_id"], name: "index_product_variants_on_product_id"
     t.index ["shared_product_id"], name: "index_product_variants_on_shared_product_id"
     t.index ["shared_product_variant_id"], name: "index_product_variants_on_shared_product_variant_id"
@@ -156,6 +157,7 @@ ActiveRecord::Schema.define(version: 2019_04_11_135512) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "inventory_quantity", default: 0, null: false
+    t.string "image_url"
     t.index ["shared_product_id"], name: "index_shared_product_variants_on_shared_product_id"
   end
 
@@ -165,6 +167,8 @@ ActiveRecord::Schema.define(version: 2019_04_11_135512) do
     t.string "product_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "s_p_v_count", default: 0
+    t.string "image_url"
   end
 
   create_table "stores", force: :cascade do |t|

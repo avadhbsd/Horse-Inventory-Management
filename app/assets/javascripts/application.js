@@ -65,11 +65,17 @@
 //= require general/jquery.repeater/src/jquery.input
 //= require general/jquery.repeater/src/repeater
 //= require general/dompurify/dist/purify
+//= require general/select2/select2.min
 //= require keen/scripts.bundle
 //= require custom/fullcalendar/fullcalendar.bundle
 //= require keen/dashboard
 //= require keen/app.bundle
 //= require custom/datatables/datatables.bundle
-//= require order_datatables
+//= require orders_datatable
+//= require products_datatable
+//= require product_variants_datatable
+//= require inventory_datatable
+//= require Chart.bundle
+//= require chartkick
 
 var KTAppOptions = {"colors": {"state": {"brand": "#5d78ff","metal": "#c4c5d6","light": "#ffffff","accent": "#00c5dc","primary": "#5867dd","success": "#34bfa3","info": "#36a3f7","warning": "#ffb822","danger": "#fd3995","focus": "#9816f4"},"base": {"label": ["#c5cbe3","#a1a8c3","#3d4465","#3e4466"],"shape": ["#f0f3ff","#d9dffa","#afb4d4","#646c9a"]}}};

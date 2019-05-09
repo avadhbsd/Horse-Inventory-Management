@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-if Rails.env.production?
+use_production = true
+use_kigurumi_stores = Rails.env.production || use_production
+
+if use_kigurumi_stores
   puts 'Creating Kigurumi USA & Kigurumi stores'
   Store.create([
                  {
@@ -28,10 +31,7 @@ if Rails.env.production?
                                   33_245_377,
                                   43_143_245
                                 ] }
-  Store.sync_all!(locations_to_connect)
-end
-
-unless Rails.env.production?
+else
   puts 'Creating Horse Dev 1 & Horse Dev 2'
   Store.create([
                  {
@@ -58,5 +58,6 @@ unless Rails.env.production?
                                   16_192_897_086,
                                   15_549_562_962
                                 ] }
-  Store.sync_all!(locations_to_connect)
 end
+
+Store.sync_all!(locations_to_connect)

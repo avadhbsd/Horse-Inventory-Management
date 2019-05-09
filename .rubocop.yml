@@ -8,10 +8,12 @@ AllCops:
     - 'db/schema.rb'
     - 'config/initializers/devise.rb'
     - 'config/environments/*'
+    - 'app/datatables/*'
 
 Style/ClassAndModuleChildren:
   Exclude:
     - 'app/controllers/admin/*'
+    - 'app/helpers/admin/*'
 
 Metrics/BlockLength:
   Exclude:
@@ -22,6 +24,6 @@ Style/MixinUsage:
   Exclude:
     - 'spec/rails_helper.rb'
 
-Naming/AccessorMethodName:
+Metrics/AbcSize:
   Exclude:
-    - 'app/datatables/*'
+    - 'spec/spec_helpers/shopify_dummy_data_helper.rb'

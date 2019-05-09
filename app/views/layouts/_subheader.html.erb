@@ -3,6 +3,24 @@
     <h3 class="kt-subheader__title">
       <%= @subheader %>
     </h3>
+    <% case params[:controller] %>
+    <% when 'admin/products' %>
+      <% if params[:action] == "show" %>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span> 
+        <div class="kt-subheader__breadcrumbs">
+          <%= link_to("All Products", admin_products_path, class: "kt-subheader__breadcrumbs-link") %>
+        </div>
+      <% end %>
+    <% when 'admin/variants' %>
+      <% if params[:action] == "show" %>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span> 
+        <div class="kt-subheader__breadcrumbs">
+          <%= link_to(@variant.shared_product.title, admin_product_path(@variant.shared_product_id), class: "kt-subheader__breadcrumbs-link") %>
+          <span class="kt-subheader__breadcrumbs-separator"></span>
+          <%= link_to("All Products", admin_products_path, class: "kt-subheader__breadcrumbs-link") %>
+        </div>
+      <% end %>
+    <% end %>
   </div>
   <div class="kt-subheader__toolbar">
   </div>

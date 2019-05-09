@@ -3,6 +3,6 @@
 # Admin Dashboard Controller
 class Admin::DashboardController < AdminController
   def index
-    @title = 'Main Dashboard'
+    @title = @subheader = 'Main Dashboard'
   end
 end
