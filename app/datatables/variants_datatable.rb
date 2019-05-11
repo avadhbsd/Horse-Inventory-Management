@@ -29,6 +29,7 @@ class VariantsDatatable < AjaxDatatablesRails::ActiveRecord
                 else
                   asset_path('admin/placeholder.png')
                 end
+      options = v.formatted_options
       {
         actions: '',
         DT_RowId: v.id,
@@ -37,6 +38,7 @@ class VariantsDatatable < AjaxDatatablesRails::ActiveRecord
         inventory_quantity: v.inventory_quantity,
         image_url: img_url,
         product_id: v.shared_product_id,
+        options: options.present? ? options.gsub("/n","<br>") : "N/A",
         id: v.id
       }
     end

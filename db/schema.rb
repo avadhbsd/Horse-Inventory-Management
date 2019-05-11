@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_18_175432) do
+ActiveRecord::Schema.define(version: 2019_05_09_045900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,12 @@ ActiveRecord::Schema.define(version: 2019_04_18_175432) do
     t.index ["store_id"], name: "index_locations_on_store_id"
   end
 
+  create_table "options", force: :cascade do |t|
+    t.string "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "orders", force: :cascade do |t|
     t.string "financial_status"
     t.string "fulfillment_status"
@@ -150,6 +156,16 @@ ActiveRecord::Schema.define(version: 2019_04_18_175432) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "shared_product_options", force: :cascade do |t|
+    t.bigint "shared_product_id"
+    t.bigint "option_id"
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["option_id"], name: "index_shared_product_options_on_option_id"
+    t.index ["shared_product_id"], name: "index_shared_product_options_on_shared_product_id"
+  end
+
   create_table "shared_product_variants", force: :cascade do |t|
     t.string "title"
     t.string "sku"
@@ -158,6 +174,9 @@ ActiveRecord::Schema.define(version: 2019_04_18_175432) do
     t.datetime "updated_at", null: false
     t.integer "inventory_quantity", default: 0, null: false
     t.string "image_url"
+    t.string "option1"
+    t.string "option2"
+    t.string "option3"
     t.index ["shared_product_id"], name: "index_shared_product_variants_on_shared_product_id"
   end
 
@@ -208,5 +227,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_175432) do
   add_foreign_key "products", "stores"
   add_foreign_key "shared_inventory_levels", "shared_locations"
   add_foreign_key "shared_inventory_levels", "shared_product_variants"
+  add_foreign_key "shared_product_options", "options"
+  add_foreign_key "shared_product_options", "shared_products"
   add_foreign_key "shared_product_variants", "shared_products"
 end

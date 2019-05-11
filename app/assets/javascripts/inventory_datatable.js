@@ -37,12 +37,13 @@ const InventoryDatatable = function() {
         {data: "product_vendor"},
         {data: "title"},
         {data: "sku"},
-        {data: "inventory_quantity"}
+        {data: "inventory_quantity"},
+        {data: "options"}
       ],
         columnDefs: [
             {
             targets: 0,
-            title: 'Product Title',
+            title: 'Product',
             orderable: true,
             render: function(data, type, full, meta) {
             return `
@@ -61,7 +62,7 @@ const InventoryDatatable = function() {
             },
             {
             targets: 3,
-            title: 'Variant Title',
+            title: 'Variant',
             orderable: true,
             render: function(data, type, full, meta) {
             return `
@@ -77,7 +78,13 @@ const InventoryDatatable = function() {
             </a>
             `;
                 },
+            },
+            {
+            targets: 6,
+            title: 'Options',
+            orderable: false,
             }
+
           ]
     });
 

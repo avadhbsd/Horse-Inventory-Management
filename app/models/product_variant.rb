@@ -38,7 +38,7 @@ class ProductVariant < ApplicationRecord
     variant = find_by_id(shopify_variant.attributes[:id])
     variant ||= new(store_id: store_id, product_id: product_id)
     variant.merge_with(shopify_variant)
-    variant.image_url = image_url
+    variant.image_url ||= image_url
     variant.save!
     InventoryItem.sync!(shopify_variant, store_id)
     sync_shared_attributes(shopify_variant, variant, image_url)

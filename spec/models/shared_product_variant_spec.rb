@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20190418175432
+# Schema version: 20190509045900
 #
 # Table name: shared_product_variants
 #
 #  id                 :bigint(8)        not null, primary key
 #  image_url          :string
 #  inventory_quantity :integer          default(0), not null
+#  option1            :string
+#  option2            :string
+#  option3            :string
 #  sku                :string
 #  title              :string
 #  created_at         :datetime         not null

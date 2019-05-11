@@ -10,11 +10,11 @@
     <div class="kt-portlet__body">
       <form class="kt-form kt-form--fit kt-margin-b-20">
         <div class="row kt-margin-b-20">
-          <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <div class="col-lg-4 kt-margin-b-10-tablet-and-mobile">
             <label>Product Title:</label>
             <input type="text" class="form-control kt-input" placeholder="Title - E.g: Bear Phone Case" data-col-index="0">
           </div>
-          <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <div class="col-lg-4 kt-margin-b-10-tablet-and-mobile">
             <label>Product Type:</label>
             <select class="form-control kt-input" id="type_select" data-col-index="1">
               <option value="">Any</option>
@@ -40,10 +40,10 @@
           </div>
           <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
             <label>Variant SKU:</label>
-            <input type="text" class="form-control kt-input" placeholder="Title - E.g: Bear Phone Case" data-col-index="4">
+            <input type="text" class="form-control kt-input" placeholder="SKU - E.g: PHONE-BEAR-1092" data-col-index="4">
           </div>
-          <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>Variant Inventory Quantity:</label>
+          <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile">
+            <label>Variant Quantity:</label>
             <select class="form-control kt-input" id="count_query_type">
               <option value="">Any</option>
               <option value="eq">Equal</option>
@@ -51,11 +51,17 @@
               <option value="gt">Greater Than</option>
             </select>
           </div>
-          <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <div class="col-lg-1 kt-margin-b-10-tablet-and-mobile">
             <label>&nbsp;</label>
-            <input type="number" class="form-control" id="count_query_number" placeholder="Number - E.g: 7">
+            <input type="number" class="form-control" id="count_query_number" placeholder="E.g: 7">
             <input type="hidden" class="kt-input" id="query_string" data-col-index="5">
           </div>
+          <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+            <label>Variant Options:</label>
+            <input type="text" class="form-control kt-input" placeholder="Variant Options - E.g: XXL" data-col-index="6">
+          </div>
+        </div>
+        <div class="row kt-margin-b-20">
         </div>
         <div class="kt-separator kt-separator--md kt-separator--dashed"></div>
         <div class="row">
@@ -75,11 +81,12 @@
         <thead>
           <tr>
             <th>Product Title</th>
-            <th>Product Type</th>
-            <th>Product Vendor</th>
+            <th>Type</th>
+            <th>Vendor</th>
             <th>Variant Title</th>
-            <th>Variant SKU</th>
-            <th>Inventory Quantity</th>
+            <th>SKU</th>
+            <th>Quantity</th>
+            <th>Options</th>
           </tr>
         </thead>
         <tbody>

@@ -24,6 +24,14 @@
                   <li>
                     Total Quantity: <b> <%= @variant.inventory_quantity %> </b>
                   </li>
+                  <% [:option1, :option2, :option3].each do |opt| %>
+                    <% if @variant.send(opt).present? && @variant.send(opt) != "Default Title" %>
+                      <li>
+                        <%= @variant.send("#{opt}_title")%>: <%= @variant.send(opt) %>
+                      </li>
+                    <% end %>
+                  <% end %>
+
                 </ul>
               </div>
               <div class="accordion accordion-outline" id="accordionExample4">

@@ -15,12 +15,13 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     @view_columns ||= {
       product_title: { source: 'SharedProduct.title', cond: :like },
-      product_type: { source: 'SharedProduct.type', cond: :string_eq },
+      product_type: { source: 'SharedProduct.product_type', cond: :string_eq },
       product_vendor: { source: 'SharedProduct.vendor', cond: :string_eq },
       title: { source: 'SharedProductVariant.title', cond: :like },
-      sku: { source: 'SharedProduct.sku', cond: :like },
+      sku: { source: 'SharedProductVariant.sku', cond: :like },
       inventory_quantity: { source: 'SharedProductVariant.inventory_quantity',
-                            cond: filter }
+                            cond: filter_quantity },
+      options: { source: 'SharedProductVariant.option1', cond: filter_options }
     }
   end
 
@@ -38,6 +39,7 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
                   else
                     asset_path('admin/placeholder.png')
                   end
+      options = v.formatted_options
       {
         actions: '',
         DT_RowId: v.id,
@@ -50,6 +52,7 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
         variant_image_url: image_url,
         product_image_url: product_image_url,
         product_id: v.shared_product_id,
+        options: options.present? ? options.gsub("\n","<br>").html_safe : "N/A",
         id: v.id
       }
     end
@@ -62,7 +65,7 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
                         .distinct
   end
 
-  def filter
+  def filter_quantity
     lambda do |column, query_string|
       query_type = query_string[0..1]
       raise 'Unkown Search Parameter' unless %w[
@@ -73,5 +76,16 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
       column.table[:inventory_quantity].send(query_type, number)
     end
   end
+
+  def filter_options
+    lambda do |column, query_string|
+      column.table[:option1].matches("%#{query_string}%").or(
+        column.table[:option2].matches("%#{query_string}%")
+      ).or(
+        column.table[:option3].matches("%#{query_string}%")
+      )
+    end
+  end
+
 end
 # :nocov:

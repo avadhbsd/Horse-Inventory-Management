@@ -34,7 +34,8 @@ const ProductVariantsDatatable = function() {
       columns: [
         {data: "title"},
         {data: "sku"},
-        {data: "inventory_quantity"}
+        {data: "inventory_quantity"},
+        {data: "options"}
       ],
         columnDefs: [
           {
@@ -55,6 +56,10 @@ const ProductVariantsDatatable = function() {
                 </a>
               `;
             }
+          },
+          {
+            targets: 3,
+            orderable: false
           }
         ]
     });

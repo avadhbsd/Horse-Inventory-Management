@@ -22,4 +22,6 @@ RSpec.describe SharedProduct, type: :model do
   it { should have_many(:product_variants) }
   it { should have_many(:shared_product_variants) }
   it { should have_many(:line_items) }
+  it { should have_many(:shared_product_options) }
+  it { should have_many(:options) }
 end

@@ -50,6 +50,8 @@ module ShopifyDummyDataHelper
     product[:vendor] = Faker::Company.name
     product[:variants] = []
     product[:images] = []
+    product[:options] = [OpenStruct.new(attributes:
+      { name: 'Title', position: 1 })]
     product
   end
 

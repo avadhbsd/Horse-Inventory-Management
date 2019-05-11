@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20190418175432
+# Schema version: 20190509045900
 #
 # Table name: shared_product_variants
 #
 #  id                 :bigint(8)        not null, primary key
 #  image_url          :string
 #  inventory_quantity :integer          default(0), not null
+#  option1            :string
+#  option2            :string
+#  option3            :string
 #  sku                :string
 #  title              :string
 #  created_at         :datetime         not null
@@ -27,6 +30,12 @@ class SharedProductVariant < ApplicationRecord
 
   scope :with_no_s_p, -> { where(shared_product_id: nil) }
 
+  delegate :option1_title, to: :shared_product
+  delegate :option2_title, to: :shared_product
+  delegate :option3_title, to: :shared_product
+
+  before_save :remove_default_title
+
   # this function expects a product variant instance, and an image url
   # it looks for a variant with the same sku
   # if it doesn't exist, it creates a new one with the sku, title, and image url
@@ -34,10 +43,9 @@ class SharedProductVariant < ApplicationRecord
     # s_variant is a shopify product variant instance
     shared_variant = where(
       sku: s_variant.attributes[:sku]
-    ).first
-    shared_variant ||= new(
-      sku: s_variant.attributes[:sku], title: s_variant.attributes[:title]
-    )
+    ).first_or_initialize
+    shared_variant.title = s_variant.attributes[:title]
+    shared_variant.put_options(s_variant.attributes)
     shared_variant.image_url = image_url
     shared_variant.save! if shared_variant.changed?
     shared_variant
@@ -73,5 +81,24 @@ class SharedProductVariant < ApplicationRecord
       shared: inventory_levels.shared.includes(:location).to_a,
       not_shared: inventory_levels.not_shared.includes(:location).to_a
     }
+  end
+
+  def put_options(s_variant_attrs)
+    self.option1 = s_variant_attrs[:option1]
+    self.option2 = s_variant_attrs[:option2]
+    self.option3 = s_variant_attrs[:option3]
+  end
+
+  def formatted_options
+    string = +''
+    string << "#{option1_title}: #{option1}" if option1 != 'Default Title'
+    string << "\n #{option2_title}: #{option2}" if option2_title
+    string << "\n #{option3_title}: #{option3}" if option3_title
+    string
+  end
+
+  def remove_default_title
+    self.title = shared_product.title if title == 'Default Title'
+    true
   end
 end
