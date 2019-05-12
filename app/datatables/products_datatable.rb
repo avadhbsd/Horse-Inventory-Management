@@ -17,7 +17,7 @@ class ProductsDatatable < AjaxDatatablesRails::ActiveRecord
       product: { source: 'SharedProduct.title', cond: :like },
       product_type: { source: 'SharedProduct.product_type', cond: :string_eq },
       vendor: { source: 'SharedProduct.vendor', cond: :string_eq },
-      variants: { source: 'SharedProduct.s_p_v_count', cond: filter }
+      variants: { source: 'SharedProduct.s_p_v_count', cond: filter_int(:s_p_v_count) }
     }
   end
 
@@ -45,16 +45,5 @@ class ProductsDatatable < AjaxDatatablesRails::ActiveRecord
     SharedProduct.all
   end
 
-  def filter
-    lambda do |column, query_string|
-      query_type = query_string[0..1]
-      raise 'Unkown Search Parameter' unless %w[
-        eq lt gt
-      ].include? query_type
-
-      number = query_string[2..-1]
-      column.table[:s_p_v_count].send(query_type, number)
-    end
-  end
 end
 # :nocov:

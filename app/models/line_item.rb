@@ -27,6 +27,7 @@ class LineItem < ApplicationRecord
   belongs_to :shared_product_variant, optional: true
   belongs_to :order, optional: true
   belongs_to :store
+  before_save :populate_blank_fulfillment_status
 
   def self.sync!(shopify_line_item, store_id, order_id)
     line_item = find_by_id(shopify_line_item.attributes[:id])
@@ -48,5 +49,14 @@ class LineItem < ApplicationRecord
         product_variant_id: product_variant.try(:id),
         shared_product_variant_id:
             product_variant.try(:shared_product_variant_id))
+  end
+
+  def human_fulfillment_status
+    fulfillment_status.humanize
+  end
+
+  def populate_blank_fulfillment_status
+    self.fulfillment_status = 'unfulfilled' if fulfillment_status.blank?
+    true
   end
 end

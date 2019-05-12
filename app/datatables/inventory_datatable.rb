@@ -20,7 +20,7 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
       title: { source: 'SharedProductVariant.title', cond: :like },
       sku: { source: 'SharedProductVariant.sku', cond: :like },
       inventory_quantity: { source: 'SharedProductVariant.inventory_quantity',
-                            cond: filter_quantity },
+                            cond: filter_int(:inventory_quantity) },
       options: { source: 'SharedProductVariant.option1', cond: filter_options }
     }
   end
@@ -63,18 +63,6 @@ class InventoryDatatable < AjaxDatatablesRails::ActiveRecord
                         .joins(:shared_product)
                         .includes(:shared_product)
                         .distinct
-  end
-
-  def filter_quantity
-    lambda do |column, query_string|
-      query_type = query_string[0..1]
-      raise 'Unkown Search Parameter' unless %w[
-        eq lt gt
-      ].include? query_type
-
-      number = query_string[2..-1]
-      column.table[:inventory_quantity].send(query_type, number)
-    end
   end
 
   def filter_options
