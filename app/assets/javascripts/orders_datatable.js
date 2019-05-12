@@ -251,14 +251,6 @@ const OrdersDatatable = function() {
 
     type_select.change();
 
-    const variant_title_field = $("#variant_title_input")
-
-    variant_title_field.change(function(){
-      $("#product_title_input").val(variant_title_field.val())
-    })
-
-    variant_title_field.change();
-
   };
 
   return {
